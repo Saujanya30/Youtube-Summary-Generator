@@ -3,4 +3,4 @@ langchain
 langchain_ollama
 flask
 flask_cors
-pytube
+yt-dlp
