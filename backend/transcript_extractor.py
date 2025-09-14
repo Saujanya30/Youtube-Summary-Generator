@@ -8,5 +8,7 @@ def save_youtube_transcript(video_id, output_file='transcript.txt'):
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(transcript_text)
         print(f"Transcript saved to {output_file}")
+        return True
     except Exception as e:
         print("Error fetching transcript:", e)
+        return False
