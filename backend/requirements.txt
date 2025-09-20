@@ -1,6 +1,7 @@
-youtube_transcript_api
+youtube_transcript_api==1.2.2
 langchain
 langchain_ollama
 flask
 flask_cors
 yt-dlp
+openai-whisper
