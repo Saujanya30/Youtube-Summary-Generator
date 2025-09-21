@@ -6,7 +6,7 @@ import subprocess
 def download_audio(url: str, output_dir: str, video_id: str) -> str:
     """Download audio from YouTube URL using yt-dlp."""
     try:
-        output_file = os.path.join(output_dir, f"{video_id}_audio.wav")
+        output_file = os.path.join(output_dir, f"{video_id}_audio.wav.webm")
         command = [
             "yt-dlp",
             "--audio-format", "wav",

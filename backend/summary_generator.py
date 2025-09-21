@@ -1,11 +1,15 @@
 from langchain_ollama import ChatOllama
 import os
+from logger import setup_logger
+
+logger = setup_logger(__name__)
 
 def generate_summary(file_path: str, output_file: str = "OutputFiles/summary.txt") -> None:
     """
     Generate a summary of the content in the specified file using an LLM and save it.
     """
     try:
+        logger.info(f"Generating summary for {file_path}")
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
@@ -22,6 +26,6 @@ def generate_summary(file_path: str, output_file: str = "OutputFiles/summary.txt
         response = llm.invoke(prompt)
         with open(output_file, "w", encoding="utf-8") as summary_file:
             summary_file.write(response.content)
-        print(f"Summary saved to {output_file}")
+        logger.info(f"Summary saved successfully: {output_file}")
     except Exception as e:
-        print(f"An error occurred while generating the summary: {e}")
+        logger.error(f"Summary generation failed: {e}")
