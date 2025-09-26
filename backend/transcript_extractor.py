@@ -2,6 +2,8 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import os
 import whisper
 import subprocess
+from pytubefix import YouTube
+from pytubefix.cli import on_progress
 from logger import setup_logger
 
 logger = setup_logger(__name__)
@@ -9,18 +11,20 @@ logger = setup_logger(__name__)
 def download_audio(url: str, output_dir: str, video_id: str) -> str:
     """Download audio from YouTube URL using yt-dlp."""
     try:
-        output_file = os.path.join(output_dir, f"{video_id}_audio.wav.webm")
+        output_file = os.path.join(output_dir, "audio.mp3")
         logger.info(f"Downloading audio from {url}")
-        command = [
-            "yt-dlp",
-            "--audio-format", "wav",
-            "-o", output_file,
-            url
-        ]
-        subprocess.run(command, check=True)
-        logger.info(f"Audio downloaded successfully: {output_file}")
-        return output_file
-    except subprocess.CalledProcessError as e:
+        yt = YouTube(url, on_progress_callback=on_progress)
+        
+        ys = yt.streams.filter(only_audio=True).first()
+        ys.download(output_path=output_dir, filename="audio.mp3")
+        
+        if os.path.exists(output_file):
+            logger.info(f"Audio downloaded successfully: {output_file}")
+            return output_file
+        else:
+            raise FileNotFoundError("Downloaded file not found")
+            
+    except Exception as e:
         logger.error(f"Failed to download audio: {e}")
         return ""
     
