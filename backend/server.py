@@ -35,8 +35,13 @@ def create_summary():
         transcript_file = os.path.join(OUTPUT_DIR, "transcript.txt")
         summary_file = os.path.join(OUTPUT_DIR, "summary.txt")
         
-        download_audio(video_url, OUTPUT_DIR, video_id)
-        transcribe_audio(audio_file, transcript_file)
+        if save_youtube_transcript(video_id, transcript_file):
+            logger.info("Transcript fetched from YouTube API")
+        else:
+            logger.info('Transcript not available via API, downloading audio and transcribing...')
+            download_audio(video_url, OUTPUT_DIR)
+            transcribe_audio(audio_file, transcript_file)
+
         generate_summary(transcript_file, summary_file)
         return jsonify({
             "message": "Summary generation completed",

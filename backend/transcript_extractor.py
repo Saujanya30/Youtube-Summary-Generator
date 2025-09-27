@@ -1,14 +1,13 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 import os
 import whisper
-import subprocess
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
 from logger import setup_logger
 
 logger = setup_logger(__name__)
 
-def download_audio(url: str, output_dir: str, video_id: str) -> str:
+def download_audio(url: str, output_dir: str) -> str:
     """Download audio from YouTube URL using yt-dlp."""
     try:
         output_file = os.path.join(output_dir, "audio.mp3")
@@ -35,7 +34,7 @@ def transcribe_audio(audio_file: str, transcript_file: str) -> bool:
         if not os.path.exists(audio_file):
             raise FileNotFoundError(f"Audio file not found: {audio_file}")
             
-        model = whisper.load_model("base")
+        model = whisper.load_model("base") # base model works fine, if you want better accuracy use "large", but it takes a lot of time.
         result = model.transcribe(audio_file)
         
         os.makedirs(os.path.dirname(transcript_file), exist_ok=True)
